@@ -1,119 +1,111 @@
-#  Contract Analysis & Risk Assessment Bot
 
-## Project Overview
+# Contract Analysis & Risk Assessment Bot
 
-The **Contract Analysis & Risk Assessment Bot** is a system designed to help **small and medium businesses (SMEs)** understand complex legal contracts, identify potential risks, and receive clear, actionable insights in simple business language.
+## Overview
 
-The platform processes contracts such as:
+The **Contract Analysis & Risk Assessment Bot** is a GenAI-powered assistant designed to help **Small and Medium Enterprises (SMEs)** understand complex legal contracts, identify potential business risks, and make informed decisions **before signing**.
 
-* Employment Agreements
-* Vendor & Service Contracts
-* Lease Agreements
-* Partnership Deeds
+The system analyzes contracts at the **clause level**, translating dense legal language into **clear, business-friendly explanations**, highlighting unfavorable terms, and generating risk insights—while maintaining strict privacy and compliance with hackathon constraints.
 
-The system follows a **structured, explainable pipeline** that transforms raw legal documents into clause-level insights and risk indicators, while maintaining confidentiality and compliance with hackathon constraints.
-
----
-
-##  Project Objectives
-
-* Convert unstructured contracts into **structured clauses**
-* Explain clauses in **simple business language**
-* Identify **unfavorable or risky terms**
-* Assign **clause-level and contract-level risk scores**
-* Support **English and Hindi contracts**
-* Maintain **privacy, auditability, and explainability**
+### Supported Contract Types
+- Employment Agreements  
+- Vendor & Service Contracts  
+- Lease Agreements  
+- Partnership Deeds  
 
 ---
 
-##  High-Level System Flow
+## Project Objectives
+
+- Convert unstructured legal contracts into **structured, explainable clauses**
+- Provide **plain-language explanations** for each clause
+- Identify **unfavorable, one-sided, or risky terms**
+- Assign **clause-level and contract-level risk scores**
+- Support **multilingual contracts (English & Hindi)**
+- Ensure **privacy, transparency, and auditability**
+- Remain **compliant with tool and data restrictions**
+
+---
+
+## High-Level System Flow
 
 ```
+
 Contract Upload
-      ↓
+↓
 Metadata Capture
-      ↓
+↓
 Text Extraction & Language Detection
-      ↓
+↓
 Clause Segmentation & Structuring
-      ↓
-Clause-Level Analysis
-      ↓
+↓
+Clause-Level Risk Analysis
+↓
 Risk Scoring & Aggregation
-      ↓
-Summary Report Generation
-```
+↓
+Summary & Insights Generation
+
+````
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
-### Core Technologies
-
-* **Python**
+### Core
+- **Python**
 
 ### Document Processing
+- **PyMuPDF** – PDF text extraction  
+- **python-docx** – DOC/DOCX extraction  
+- **Native Python** – TXT file handling  
 
-* **PyMuPDF** – PDF text extraction
-* **python-docx** – DOC/DOCX extraction
-* **Native Python** – TXT files
+### NLP & Text Processing
+- **Regex (re)** – Rule-based clause segmentation  
+- **langdetect** – Language detection (English / Hindi)  
 
-### Text & NLP Processing
+### GenAI
+- **GPT-4** – Clause explanation and risk reasoning  
+  > Used strictly for **text understanding**, not legal advice
 
-* **Regex (re)** – rule-based clause segmentation
-* **langdetect** – language detection (English / Hindi)
-
-### AI / Analysis
-
-* **LLM (GPT-4 )** – clause explanation & risk reasoning
-  *(Used only for text analysis, not legal advice)*
-
-### Output & Processing
-
-* **JSON** – structured clause representation
-* **In-memory processing** – no data persistence
+### Data Handling
+- **JSON** – Structured clause representation  
+- **In-memory processing** – No persistent storage  
 
 ---
 
-##  Phase 1: Contract Ingestion & Metadata
+## Phase 1: Contract Ingestion & Metadata
 
-### What Happens
+### Functionality
+- User uploads a contract (PDF / DOC / TXT)
+- System captures:
+  - File type
+  - File size
+  - Optional contract category
 
-* User uploads a contract (PDF / DOC / TXT)
-* System captures:
-
-  * File type
-  * Contract size
-  * Optional contract category
-
-### Design Choice
-
-* Files are processed **temporarily**
-* No contracts are stored permanently
+### Design Rationale
+- Contracts are processed **only within the session**
+- No files or extracted text are stored permanently
+- Ensures confidentiality and data safety
 
 ---
 
-##  Phase 2: Clause Extraction & Structuring (Core Foundation)
+## Phase 2: Clause Extraction & Structuring
 
 ### Objective
-
-Transform raw contract text into **clean, structured, language-aware clauses**.
+Transform raw contract text into **clean, structured, language-aware clauses** that can be safely analyzed and audited.
 
 ### Key Capabilities
-
-* Multi-format text extraction
-* Noise-tolerant preprocessing
-* Rule-based clause splitting
-* Multilingual language detection
+- Multi-format text extraction
+- Noise removal (headers, footers, page numbers)
+- Rule-based clause segmentation
+- Clause-level language detection
 
 ### Clause Segmentation Logic
+- Identifies numbered clauses (`1`, `1.1`, `2.3`, etc.)
+- Preserves original clause wording
+- Maintains clause order for traceability
 
-* Detects numbered clauses (`1`, `1.1`, `2.3`, etc.)
-* Preserves original wording
-* Avoids data loss (audit-safe)
-
-### Clause Output Structure
-
+### Clause Data Structure
 ```json
 {
   "clause_id": "C5",
@@ -122,136 +114,120 @@ Transform raw contract text into **clean, structured, language-aware clauses**.
   "position": 5,
   "language": "en"
 }
-```
+````
 
 This structure enables:
 
 * Explainability
-* Risk scoring
-* Downstream AI processing
+* Risk attribution
+* Audit-safe analysis
 
 ---
 
-##  Phase 3: Clause-Level Risk Analysis
+## Phase 3: Clause-Level Risk Analysis
 
 ### Purpose
 
-Identify **business risk**, not legal judgment.
+Identify **business and operational risk**, not legal judgments.
 
-### What the System Analyzes
-
-For each clause, the system determines:
+### Analysis Per Clause
 
 * Clause intent (e.g., termination, liability, confidentiality)
-* Presence of **one-sided or unfavorable terms**
-* Risk triggers based on predefined patterns
+* Detection of one-sided or unfavorable terms
+* Pattern-based risk indicators
+* Plain-language explanation
 
-### Examples of Risk Indicators
+### Common Risk Indicators
 
 * Termination without notice
-* Unlimited liability
+* Unlimited or uncapped liability
 * Excessive penalties
 * Foreign jurisdiction clauses
-* Missing dispute resolution
+* Missing dispute resolution mechanisms
 
 ### Risk Categories
 
-* **Low Risk** – Standard, balanced clauses
-* **Medium Risk** – Needs attention or clarification
-* **High Risk** – Potentially harmful to SMEs
+* **Low Risk** – Standard and balanced clauses
+* **Medium Risk** – Requires attention or clarification
+* **High Risk** – Potentially harmful for SMEs
 
 ---
 
-## Phase 4: Risk Scoring & Aggregation
+##  Phase 4: Risk Scoring & Aggregation
 
 ### Clause-Level Scoring
 
 * Each clause receives a **risk severity score**
-* Score is based on:
+* Based on:
 
   * Clause type
   * Detected risk indicators
   * Contract context
 
-### Contract-Level Risk
+### Contract-Level Insights
 
-* Clause scores are aggregated to determine:
-
-  * Overall contract risk level
-  * Top risky clauses
-  * Priority areas for review
+* Aggregated overall risk level
+* Identification of top high-risk clauses
+* Prioritized areas for review
 
 ---
 
-##  Phase 5: Summary & Insights
+## Phase 5: Summary & Insights
 
-The system generates:
+The system generates a **business-friendly summary**, including:
 
-* Plain-language contract summary
-* List of **high-risk clauses**
-* Suggested areas for mitigation
-* Business-friendly explanations
+* Overall contract risk assessment
+* List of high-risk clauses
+* Key areas requiring attention
+* Clear explanations to guide next steps
 
-This allows SMEs to:
+This helps SMEs:
 
-* Understand contracts without legal background
-* Decide when to consult a legal expert
+* Quickly understand complex contracts
+* Decide when professional legal consultation is required
 
 ---
 
 ## Multilingual Support
 
-* Contracts in **English and Hindi**
+* Supports **English and Hindi contracts**
 * Language detected at clause level
-* Enables inclusive access for Indian SMEs
+* Ensures accessibility for Indian SMEs
 
 ---
 
-##  Privacy & Compliance
+## Privacy & Compliance
 
-* All processing is **in-memory**
-* No contract data stored
-* No external legal databases
-* No case law integration
-* Fully compliant with hackathon constraints
+* All processing is **session-based and in-memory**
+* No contract data is stored or logged
+* No integration with:
+
+  * Legal databases
+  * Case law systems
+  * External legal APIs
+* Fully compliant with hackathon tool restrictions
 
 ---
 
 ## Out of Scope (By Design)
 
 * Legal advice or legal validation
-* Court judgments or case law references
+* Statutory interpretation or case law references
 * Persistent data storage
-* External legal APIs
+* External legal API integrations
 
 ---
 
 ##  Design Principles
 
-* **Explainable over opaque**
-* **Deterministic before AI**
+* **Explainability over opacity**
+* **Deterministic logic before GenAI**
 * **Risk awareness, not legal advice**
 * **Privacy-first architecture**
-* **Modular & extensible**
+* **Modular and extensible system design**
 
 ---
 
-##  Team Contributions
-
-* **Clause Extraction & Structuring (Phase 2)**
-
-  * Document parsing
-  * Rule-based segmentation
-  * Multilingual handling
-  * Structured output design
-
-* **Risk Analysis & Scoring**
-
-  * Clause interpretation
-  * Risk categorization
-  * Contract-level aggregation
-
----
 
 ##  Disclaimer
 
