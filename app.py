@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 from collections import Counter
 
-from extractor import extract_and_split
+from extraction.extractor import extract_and_split
 from llm_analyzer import analyze_clause
 from risk_engine import calculate_overall_risk
 
